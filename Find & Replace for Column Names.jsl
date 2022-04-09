@@ -1,0 +1,78 @@
+//!
+// Initialize
+Names Default to Here( 1 );
+Clear Log();
+dt = Current Data Table( );
+
+// Stop the script if no open data tables
+If( Is Empty( dt ), Stop());
+
+cols = dt << Get Selected Columns( ); 
+
+// Stop the script if no columns selected
+If( N Items( cols ) == 0, Stop());
+
+// Prompt user for text to remove
+eBox1 =	New Window(
+		"Find",
+		<< Modal,
+		Text Box(
+		    "What text should be removed from the column names 
+		    (including spaces, i.e. delete the text you want to keep)?",
+		    Justify Text ("Center"),
+		    Set Width(500)
+		),
+ 
+		Spacer Box( Size( 12.5, 12.5 ) ),
+		
+		editBox = Text Edit Box(cols[1] << Get Name()),
+ 		editBox << Set Width(500), 
+		
+		Spacer Box( Size( 12.5, 12.5 ) ),
+
+		H List Box( Button Box( "OK" ), Button Box( "Cancel" ), << Horizontal Alignment( "Center" ) )
+);
+ 
+// Stop the script if the user hits the cancel button
+If( eBox1["Button"] == -1, Stop());
+ 
+// Get the contents of the Edit Box
+remove this = editBox << get text;
+ 
+// Stop the script if the user doesn't enter any text
+If( remove this == "", Stop());
+
+// Prompt user for text to replace
+eBox2 =	New Window(
+		"Replace With",
+		<< Modal,
+		Text Box(
+		    "What should the text be replaced with (including spaces, or leave blank)?",
+		    Justify Text ("Center"),
+		    Set Width(250)
+		),
+ 
+		Spacer Box( Size( 12.5, 12.5 ) ),
+		
+		editBox = Text Edit Box(),
+ 		editBox << Set Width(250), 
+		
+		Spacer Box( Size( 12.5, 12.5 ) ),
+
+		H List Box( Button Box( "OK" ), Button Box( "Cancel" ), << Horizontal Alignment( "Center" ) )
+);
+ 
+// Stop the script if the user hits the cancel button
+If( eBox2["Button"] == -1, Stop());
+ 
+// Get the contents of the Edit Box
+replace with = editBox << get text;
+ 
+// Loop through the columns adding the tag to the end of the existing name
+For( i = 1, i <= N Items( cols ), i++,
+	
+	cols[ i ] << set name( munger(cols[ i ] << get name, 1, remove this, replace with))
+	
+); // Next column
+
+// End

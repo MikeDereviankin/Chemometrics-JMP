@@ -1,0 +1,31 @@
+//Master Histogram Script for FMC
+
+//open data table
+dt = Current Data Table();
+
+//Obtain a list of numeric/continuous column names as strings//
+colList = dt << Get Column Names( Continuous, String );
+
+//Loop through the list to generate the desired Graph Builder use Column(dt, colList[i])
+//and save the report as a PNG file //
+For( i = 1, i <= Nitems( colList ), i++,
+	
+gb = dt << Graph Builder(
+	Size( 534, 464 ),
+	Show Control Panel( 0 ),
+	Show Legend( 0 ),
+	Categorical Color Theme( "Universal" ),
+	Variables( X( :Label ), Y(Column(dt, colList[i])) ),
+	Elements( Bar( X, Y, Legend( 4 ) ) ),
+	SendToReport(
+		Dispatch( {}, "graph title", TextEditBox, {Set Text( "Profile" )} ),
+		Dispatch( {}, "Y title", TextEditBox, {Set Text( "%" )} ),
+		Dispatch( {}, "Graph Builder", FrameBox, {Background Color( 16 )} )
+	)
+);
+
+	gb << Save Picture( "D:\MD\Datto Workplace\Projects\External\Portland Harbour FMC\Dioxins\JMP Graphs\2,3,7,8 Histograms\" || colList[i] ||".png", PNG );
+);
+
+/* Close table and all invisible reports */
+Close( dt, No Save );

@@ -1,0 +1,45 @@
+Clear Globals();
+
+Names Default To Here( 1 );
+
+// reference the data table
+
+dt = current data table();
+
+// introduce the column with the distance to be updated in the dots table. Feel free to change the name from "Distance"
+
+dt << add multiple columns( "Distance", 1, after( 85 ), numeric );
+
+// extract the longitude and the latitude values from the table - as radians. Need to have your release point as "Reference" coordinates
+
+HHx = (Column( dt, "Reference Long" ) << getValues) * Pi() / 180 ;
+
+HHy = (Column( dt, "Reference Lat" ) << getValues) * Pi() / 180 ;
+
+PSx = (Column( dt, "Longitude" ) << getValues) * Pi() / 180 ;
+
+PSy = (Column( dt, "Latitude" ) << getValues) * Pi() / 180 ;
+
+// declare the calculation function in KMs. This is the haversine calculation! Where R is the mean radius of Earth
+
+haversine = Function( {long1, lat1, long2, lat2, R = 6371},
+
+      {Default Local},
+
+      a = Sin( (lat1 - lat2) / 2 ) ^ 2 + Cos( lat1 ) * Cos( lat2 ) * Sin( (long1 - long2) / 2 ) ^ 2;
+
+      c = 2 * ATan( a ^ 0.5, (1 - a) ^ 0.5 );
+
+      d = (R * c)// KMS
+
+);
+
+wait (0.01);
+
+// run the function along the rows of the table. Loops make life very very very easy. 
+
+For( i = 1, i <= N Row( dt ) - 1, i++,
+
+      dt:distance[i] = haversine( HHx[i], HHy[i], PSx[i], PSy[i] )
+
+);

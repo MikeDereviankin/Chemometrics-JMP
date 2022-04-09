@@ -1,0 +1,51 @@
+/* Name: Cosine Theta Script
+
+Description: This is the foundation script for the addoin to conduct cosine theta similarity metrices using the R package from lsa called cosine. 
+
+Author: Mike Dereviankin
+
+Version: v.1. 
+
+*/
+
+//Reference the data table being used and transpose columns so that the variable names are rows and samples are columns. Change Columns if need be. Will eventually make this into an add in. The label is the first column that contains the sample names. Adjust accordingly. 
+
+//initializes the R interfaces
+R Init();
+
+//Name data table
+dt = Current Data Table();
+
+//Obtain a list of numeric/continuous column names as strings//
+colList = dt << Get Column Names( Continuous, String );
+
+//Function to communicate with R: send script & data to R, get results table back. 
+//send data to R
+R Send( dt ); 
+
+//Run R code
+R Submit (
+	"
+	library(lsa)
+	dt #prints dt to the log
+	temp1 <- dt
+	temp1[ ,c('Sample')] <- list(NULL) #Remove unwanted columns
+	temp2 <-as.matrix(temp1)
+	temp3 <-as.matrix(cosine(temp2)) 
+	");
+
+//return data from R
+cosine = R Get(temp3);
+
+cosinetable = As Table( cosine );
+
+//change column names to match the original table
+
+For( i = 1, i <= N Items( colList ), i++, 
+ 
+	Column( cosinetable, i ) << Set Name( colList[i])
+		
+	);
+
+//terminates the R interfaces
+R Term();

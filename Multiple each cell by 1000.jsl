@@ -1,0 +1,4 @@
+dt = Current Data Table();
+For( i = 2, i <= N Col( dt ), i++,
+  Column( i ) << set values( (Column( i ) << get as matrix) * 1000 )
+);

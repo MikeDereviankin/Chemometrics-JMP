@@ -1,0 +1,24 @@
+names default to here(1);
+dt=current data table();
+
+
+x=char(:name("Log[1,2,3,6,7,8...pid Adj (pg/g)]
+")<<get script);
+x=substr(x,contains(x,"Color Cells"));
+
+x=substr(x,contains(x,"{35, ")+5);
+x=substr(x,1,contains(x,"}"));
+
+
+myMatrix =matrix( parse(x));
+
+dt:Name("Log[1,2,3,6,7,8...pid Adj (pg/g)]
+") << data type(character);
+
+dt << select rows(myMatrix);
+
+dt:Name("Log[1,2,3,6,7,8...pid Adj (pg/g)]
+")[dt<<get selected rows] = "outlier";
+dt << invert row selection;
+dt:Name("Log[1,2,3,6,7,8...pid Adj (pg/g)]
+")[dt<<get selected rows] = "normal";

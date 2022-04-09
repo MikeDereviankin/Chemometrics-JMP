@@ -1,0 +1,59 @@
+Names Default To Here( 1 );
+
+//defines the two data tables, they must be open already and named appropriately
+dt_target = Data Table( "Target" );
+dt_template = Data Table( "Template" );
+
+//This gets the column names for each table
+target_col_names = dt_target << get columnnames( Numeric, string );
+template_col_names = dt_template << get column Names( Numeric, string );
+
+//This tests the column names in the target data table to see if there is a "+" and if so puts that column name in the target_col_keep list
+target_col_keep = {};
+For( i = 1, i <= N Cols( dt_target ) - 1, i++,
+	If( Contains( target_col_names[i], "+" ) != 0,
+		Insert Into( target_col_keep, target_col_names[i] )
+	)
+);
+
+//This loops through the items in target_col_keep to make new columns and add formulas.
+//The complicated part of As Column(Num(Word(Eval(EvalExpr(Expr()))))) basically converts the number names to a reference-able column.
+//The extra +1 is there because of the first column in the dt_template data table -- it offsets the column numbers on down the line in //reference to the target data table.
+//The first word command gets only the first column of the added up to the "+", hence Word(1,...)
+//The second word command gets only the second word after the "+", hence Word(2,...)
+//The new columns are added to the end of the data table.
+i=.;//reset counter
+For( i = 1, i <= N Items( target_col_keep ), i++,
+	dt_template << New Column( target_col_keep[i],
+		"Numeric",
+		"continuous",
+		Formula(
+			As Column( (Num( Word( 1, Eval( Eval Expr( Expr( target_col_keep[i] ) ) ), "+" ) ) + 1) ) + As Column(
+				(Num( Word( 2, Eval( Eval Expr( Expr( target_col_keep[i] ) ) ), "+" ) ) + 1)
+			)
+		)
+	);
+	
+	//this step moves the newly created column after the second column of the sum. Comment out if you don't want to move them.
+	prevcol = Num( Word( 1, Eval( Eval Expr( Expr( target_col_keep[i] ) ) ), "+" ) );
+	dt_template << select Columns( As Column( Eval( Eval Expr( Expr( target_col_keep[i] ) ) ) ) ) <<
+	Move Selected Columns( After( Column( Parse( ":Name(\!"" || Char( prevcol ) || "\!")" ) ) ) );
+);
+
+Wait(0.5);
+
+//This part removes the formula. Comment out if you don't want to remove the formula.
+j = .;//reset counter
+For( j = 1, j <= N Col( dt_template ), j++,
+	As Column( j ) << Delete property( "Formula" )
+);
+
+
+//This deletes the old columns that were added together. Comment out if you don't want to delete them.
+k=.;//reset counter
+For( k = 1, k <= N Items( target_col_keep ), k++,
+	str1 = Num( Word( 1, Eval( Eval Expr( Expr( target_col_keep[k] ) ) ), "+" ) );
+	str2 = Num( Word( 2, Eval( Eval Expr( Expr( target_col_keep[k] ) ) ), "+" ) );
+	dt_template << Delete Columns( Column( Parse( ":Name(\!"" || Char( str1 ) || "\!")" ) ) );
+	dt_template << Delete Columns( Column( Parse( ":Name(\!"" || Char( str2 ) || "\!")" ) ) );
+);

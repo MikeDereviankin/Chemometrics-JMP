@@ -1,0 +1,293 @@
+//Master Histogram Script for FMC
+
+													//2,3,7,8 Histograms
+
+//open data table
+dt = Current Data Table();
+
+//Transpose column 
+
+dt << Transpose(
+	columns(
+		:Name( "2,3,7,8-TCDD, Pct of Total" ),
+		:Name( "1,2,3,7,8-PeCDD, Pct of Total" ),
+		:Name( "1,2,3,4,7,8-HxCDD, Pct of Total" ),
+		:Name( "1,2,3,6,7,8-HxCDD, Pct of Total" ),
+		:Name( "1,2,3,7,8,9-HxCDD, Pct of Total" ),
+		:Name( "1,2,3,4,6,7,8-HpCDD, Pct of Total" ),
+		:Name( "OCDD, Pct of Total" ),
+		:Name( "2,3,7,8-TCDF, Pct of Total" ),
+		:Name( "1,2,3,7,8-PeCDF, Pct of Total" ),
+		:Name( "2,3,4,7,8-PeCDF, Pct of Total" ),
+		:Name( "1,2,3,4,7,8-HxCDF, Pct of Total" ),
+		:Name( "1,2,3,6,7,8-HxCDF, Pct of Total" ),
+		:Name( "1,2,3,7,8,9-HxCDF, Pct of Total" ),
+		:Name( "2,3,4,6,7,8-HxCDF, Pct of Total" ),
+		:Name( "1,2,3,4,6,7,8-HpCDF, Pct of Total" ),
+		:Name( "1,2,3,4,7,8,9-HpCDF, Pct of Total" ),
+		:Name( "OCDF, Pct of Total" )
+	),
+	Transpose selected rows only( 1 ),
+	Label( :Sample Code ),
+	Output Table( "Transposed Dioxin Table" )
+); 
+
+//Obtain a list of numeric/continuous column names as strings//
+colList = dt << Get Column Names( Continuous, String );
+
+//Loop through the list to generate the desired Graph Builder use Column(dt, colList[i])
+//and save the report as a PNG file //
+For( i = 1, i <= Nitems( colList ), i++,
+	
+gb = dt << Graph Builder(
+	Size( 638, 486 ),
+	Show Control Panel( 0 ),
+	Variables( X( :Label ), Y(Column(dt, colList[i]) ) ),
+	Elements( Bar( X, Y, Legend( 4 ) ) ),
+	SendToReport(
+		Dispatch(
+			{},
+			"ARK-WB-30-10-12_EPASPLIT",
+			ScaleBox,
+			{Scale( "Log" ), Format( "Percent", 12, 0 ), Min( 0.0001 ), Max( 1 ),
+			Inc( 1 ), Minor Ticks( 1 ), Label Row(
+				{Show Minor Labels( 0 ), Show Minor Ticks( 0 )}
+			)}
+		),
+		Dispatch(
+			{},
+			"graph title",
+			TextEditBox,
+			{Set Text( "Dioxin 2, 3, 7, 8 Profiles" )}
+		),
+		Dispatch( {}, "Y title", TextEditBox, {Set Text( "[Dioxin]" )} ),
+		Dispatch( {}, "Graph Builder", FrameBox, {Background Color( 0 )} ),
+		Dispatch(
+			{},
+			"400",
+			LegendBox,
+			{Legend Position( {4, [-1]} ), Position( {-1} )}
+		)
+	)
+);
+
+	gb << Save Picture( "D:\MD\Datto Workplace\Projects\External\Portland Harbour FMC\Dioxins\JMP Graphs\2,3,7,8 Histograms\" || colList[i] ||".png", PNG );
+);
+
+/* Close table and all invisible reports */
+Close( dt, No Save );
+
+													//Totals Histogram			
+
+//open data table
+dt = Current Data Table();
+
+//Transpose column 
+
+dt << Transpose(
+	columns(
+		:Name( "Total Hepta-Dioxins, Pct of Total" ),
+		:Name( "Total Hepta-Furans, Pct of Total" ),
+		:Name( "Total Hexa-Dioxins, Pct of Total" ),
+		:Name( "Total Hexa-Furans, Pct of Total" ),
+		:Name( "Total Penta-Dioxins, Pct of Total" ),
+		:Name( "Total Penta-Furans, Pct of Total" ),
+		:Name( "Total Tetra-Dioxins, Pct of Total" ),
+		:Name( "Total Tetra-Furans, Pct of Total" )
+	),
+	Transpose selected rows only( 1 ),
+	Label( :Sample Code ),
+	Output Table( "Transpose Totals" )
+); 
+
+//Obtain a list of numeric/continuous column names as strings//
+colList = dt << Get Column Names( Continuous, String );
+
+//Loop through the list to generate the desired Graph Builder use Column(dt, colList[i])
+//and save the report as a PNG file //
+For( i = 1, i <= Nitems( colList ), i++,
+	
+gb = dt << Graph Builder(
+	Size( 688, 464 ),
+	Show Control Panel( 0 ),
+	Variables( X( :Label ), Y(Column(dt, colList[i]) ) ),
+	Elements( Bar( X, Y, Legend( 4 ) ) ),
+	SendToReport(
+		Dispatch(
+			{},
+			"ARK-WB-30-10-12_EPASPLIT",
+			ScaleBox,
+			{Min( 0 ), Max( 1 ), Inc( 0.1 ), Minor Ticks( 0 )}
+		),
+		Dispatch( {}, "graph title", TextEditBox, {Set Text( "Total Homolog" )} ),
+		Dispatch( {}, "Y title", TextEditBox, {Set Text( "%" )} ),
+		Dispatch( {}, "Graph Builder", FrameBox, {Background Color( 0 )} ),
+		Dispatch(
+			{},
+			"400",
+			LegendBox,
+			{Legend Position( {4, [-1]} ), Position( {-1} )}
+		)
+	)
+);
+
+	gb << Save Picture( "D:\MD\Datto Workplace\Projects\External\Portland Harbour FMC\Dioxins\JMP Graphs\SUM histograms\" || colList[i] ||".png", PNG );
+);
+
+/* Close table and all invisible reports */
+Close( dt, No Save );
+
+
+													//REL Histogram			
+
+//open data table
+dt = Current Data Table();
+
+//Transpose column 
+
+dt << Transpose(
+	columns(
+		:Name( "2,3,7,8-TCDDREL, Pct of Total" ),
+		:Name( "1,2,3,7,8-PeCDDREL, Pct of Total" ),
+		:Name( "1,2,3,4,7,8-HxCDDREL, Pct of Total" ),
+		:Name( "1,2,3,6,7,8-HxCDDREL, Pct of Total" ),
+		:Name( "1,2,3,7,8,9-HxCDDREL, Pct of Total" ),
+		:Name( "1,2,3,4,6,7,8-HpCDDREL, Pct of Total" ),
+		:Name( "OCDDREL, Pct of Total" ),
+		:Name( "2,3,7,8-TCDFREL, Pct of Total" ),
+		:Name( "1,2,3,7,8-PeCDFREL, Pct of Total" ),
+		:Name( "2,3,4,7,8-PeCDFREL, Pct of Total" ),
+		:Name( "1,2,3,4,7,8-HxCDFREL, Pct of Total" ),
+		:Name( "1,2,3,6,7,8-HxCDFREL, Pct of Total" ),
+		:Name( "1,2,3,7,8,9-HxCDFREL, Pct of Total" ),
+		:Name( "2,3,4,6,7,8-HxCDFREL, Pct of Total" ),
+		:Name( "1,2,3,4,6,7,8-HpCDFREL, Pct of Total" ),
+		:Name( "1,2,3,4,7,8,9-HpCDFREL, Pct of Total" ),
+		:Name( "OCDFREL, Pct of Total" )
+	),
+	Transpose selected rows only( 1 ),
+	Label( :Sample Code ),
+	Output Table( "Transpose REL" )
+);
+
+//Obtain a list of numeric/continuous column names as strings//
+colList = dt << Get Column Names( Continuous, String );
+
+//Loop through the list to generate the desired Graph Builder use Column(dt, colList[i])
+//and save the report as a PNG file //
+For( i = 1, i <= Nitems( colList ), i++,
+	
+gb = dt << Graph Builder(
+	Size( 683, 466 ),
+	Show Control Panel( 0 ),
+	Variables( X( :Label ), Y(Column(dt, colList[i]) ) ),
+	Elements( Bar( X, Y, Legend( 4 ) ) ),
+	SendToReport(
+		Dispatch(
+			{},
+			"Label",
+			ScaleBox,
+			{Min( 0 ), Max( 16.5 ), Inc( 1 ), Minor Ticks( 0 ),
+			Label Row( Label Orientation( "Vertical" ) )}
+		),
+		Dispatch(
+			{},
+			"ARK-WB-30-10-12_EPASPLIT",
+			ScaleBox,
+			{Scale( "Log" ), Format( "Best", 12 ), Min( 0.0001 ), Max( 1 ), Inc( 1 ),
+			Minor Ticks( 1 ), Label Row(
+				{Show Minor Labels( 0 ), Show Minor Ticks( 0 )}
+			)}
+		),
+		Dispatch( {}, "graph title", TextEditBox, {Set Text( "Relative Homolog" )} ),
+		Dispatch( {}, "Y title", TextEditBox, {Set Text( "%" )} ),
+		Dispatch( {}, "Graph Builder", FrameBox, {Background Color( 0 )} ),
+		Dispatch(
+			{},
+			"400",
+			LegendBox,
+			{Legend Position( {4, [-1]} ), Position( {-1} )}
+		)
+	)
+);
+	gb << Save Picture( "D:\MD\Datto Workplace\Projects\External\Portland Harbour FMC\Dioxins\JMP Graphs\REL Histograms\" || colList[i] ||".png", PNG );
+);
+
+/* Close table and all invisible reports */
+Close( dt, No Save );
+
+
+													//TEQ Histogram			
+
+//open data table
+dt = Current Data Table();
+
+//Transpose column 
+
+dt << Transpose(
+	columns(
+		:Name( "2,3,7,8-TCDDTEQ, Pct of Total" ),
+		:Name( "1,2,3,7,8-PeCDDTEQ, Pct of Total" ),
+		:Name( "1,2,3,4,7,8-HxCDDTEQ, Pct of Total" ),
+		:Name( "1,2,3,6,7,8-HxCDDTEQ, Pct of Total" ),
+		:Name( "1,2,3,7,8,9-HxCDDTEQ, Pct of Total" ),
+		:Name( "1,2,3,4,6,7,8-HpCDDTEQ, Pct of Total" ),
+		:Name( "OCDDTEQ, Pct of Total" ),
+		:Name( "2,3,7,8-TCDFTEQ, Pct of Total" ),
+		:Name( "1,2,3,7,8-PeCDFTEQ, Pct of Total" ),
+		:Name( "2,3,4,7,8-PeCDFTEQ, Pct of Total" ),
+		:Name( "1,2,3,4,7,8-HxCDFTEQ, Pct of Total" ),
+		:Name( "1,2,3,6,7,8-HxCDFTEQ, Pct of Total" ),
+		:Name( "1,2,3,7,8,9-HxCDFTEQ, Pct of Total" ),
+		:Name( "2,3,4,6,7,8-HxCDFTEQ, Pct of Total" ),
+		:Name( "1,2,3,4,6,7,8-HpCDFTEQ, Pct of Total" ),
+		:Name( "1,2,3,4,7,8,9-HpCDFTEQ, Pct of Total" ),
+		:Name( "OCDFTEQ, Pct of Total" )
+	),
+	Transpose selected rows only( 1 ),
+	Label( :Sample Code ),
+	Output Table( "Transpose TEQ" )
+);
+
+//Obtain a list of numeric/continuous column names as strings//
+colList = dt << Get Column Names( Continuous, String );
+
+//Loop through the list to generate the desired Graph Builder use Column(dt, colList[i])
+//and save the report as a PNG file //
+For( i = 1, i <= Nitems( colList ), i++,
+	
+gb = dt << Graph Builder(
+	Size( 534, 464 ),
+	Show Control Panel( 0 ),
+	Variables( X( :Label ), Y( :Name( "ARK-WB-30-10-12_EPASPLIT" ) ) ),
+	Elements( Bar( X, Y, Legend( 4 ) ) ),
+	SendToReport(
+		Dispatch(
+			{},
+			"Label",
+			ScaleBox,
+			{Label Row( Label Orientation( "Vertical" ) )}
+		),
+		Dispatch(
+			{},
+			"ARK-WB-30-10-12_EPASPLIT",
+			ScaleBox,
+			{Scale( "Log" ), Min( 0.0001 ), Max( 1 ), Inc( 1 ), Minor Ticks( 1 ),
+			Label Row( {Show Minor Labels( 0 ), Show Minor Ticks( 0 )} )}
+		),
+		Dispatch( {}, "graph title", TextEditBox, {Set Text( "Relative TEQ" )} ),
+		Dispatch( {}, "Y title", TextEditBox, {Set Text( "%" )} ),
+		Dispatch( {}, "Graph Builder", FrameBox, {Background Color( 0 )} ),
+		Dispatch(
+			{},
+			"400",
+			LegendBox,
+			{Legend Position( {4, [-1]} ), Position( {-1} )}
+		)
+	)
+);
+	gb << Save Picture( "D:\MD\Datto Workplace\Projects\External\Portland Harbour FMC\Dioxins\JMP Graphs\TEQ Histograms\" || colList[i] ||".png", PNG );
+);
+
+/* Close table and all invisible reports */
+Close( dt, No Save );

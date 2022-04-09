@@ -1,0 +1,12 @@
+Graph Builder(
+	Size( 787, 448 ),
+	Show Control Panel( 0 ),
+	Show Legend( 0 ),
+	Categorical Color Theme( "Universal" ),
+	Variables( X( :Congener ), Y( :"% Total"n ) ),
+	Elements( Bar( X, Y, Legend( 4 ) ) ),
+	SendToReport(
+		Dispatch( {}, "graph title", TextEditBox, {Set Text( "Profile" )} ),
+		Dispatch( {}, "Graph Builder", FrameBox, {Background Color( 16 )} )
+	)
+)

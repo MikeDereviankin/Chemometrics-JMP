@@ -1,0 +1,14 @@
+dt = Current Data Table ();
+
+dtSort = New Table( "Sort Names", New Column( "Name", character, set values(colNames)));
+	dtSort << New Column("Primary Number", formula( Num( Word( -2, :Name, " ()"))));
+	dtSort << New Column("Secondary Number", formula( Num( Word( -1, :Name, " ()"))));
+	
+// Sort in numerical order
+dtSort << sort(By(:Primary Number, :Secondary Number),order(ascending,ascending), replace table(1));
+
+// Order the columns in the original data table by the order in the sorting table
+For(i=1,i<=N Rows(dtSort),i++,
+	eval(parse("dt << go to (:Name(\!"" || column(dtSort,"name")[i] || "\!"));"));
+	dt << move selected columns( To Last );
+);

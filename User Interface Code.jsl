@@ -1,0 +1,20 @@
+//Find Current Data Table
+
+dt = Current Data Table (); 
+
+
+// Make a UI to allow selection of columns from the current data table
+nw = NewWindow("Glenn Johnson Normalization Technique",
+		TextBox("Select columns:", << fontColor("Blue")),
+		clb = ColListBox(all, numeric),
+		LineUpBox(NCol(2),
+			ButtonBox("OK", OKscript),
+			ButtonBox("Cancel", nw << closeWindow)
+			);
+		);
+nw << setWindowSize(300, 300);
+
+// This script runs if the user hits 'OK'
+OKScript =
+Expr(
+	nw << closeWindow;

@@ -1,0 +1,25 @@
+/* This is used to scale chemical fingerprints based on the work by Glenn Johnson 2017. This will only work with no missing values so make sure to impute your data before hand */
+
+names default to here(1);
+
+dt = Current Data Table();
+ColumnList = dt << Get Selected Columns;
+
+ReplaceTarget = "<column>";
+FormulaInput = "((log(<column>))-Col Mean(log(<column>)))/Col Std Dev(log(<column>)";
+
+//for each column
+For( i = 1, i <= N Items( ColumnList ), i++,
+	FormulaComplete = Substitute( FormulaInput, "<column>", ":Name(\!"" || Char( ColumnList[i] ) || "\!")");
+	
+	//create an expression that will create the new column reference
+	newColExpr = Expr(
+		dt << New Column( Expr( Char( ColumnList[i] ) || " Glenn Johnson Scaling" ),
+			Numeric,
+			Formula( Expr( Parse( FormulaComplete ) ) )
+		)
+	);
+	
+	//Create the new column
+	Eval( Eval expr( newColExpr ) );
+);

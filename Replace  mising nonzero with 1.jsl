@@ -1,0 +1,5 @@
+dt = Current Data Table();
+nc = dt << get column names( Numeric );
+For( i = 1, i <= N Items( nc ), i++,
+  nc[i][dt << get rows where( not( nc[i][] ) ==0 )] = 1.
+);
