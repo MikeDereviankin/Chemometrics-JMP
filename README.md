@@ -68,14 +68,14 @@ If you have any feedback, please reach out to us at [chemistrymatters email?]
 
 - Replace negative with zero
 - Replace zero with missing values
-- Re- ordering columns
+- Re-ordering columns
 - Multiple each cell by 1000
 - Histogram Master Script
-- Find and Replace for column names
-- Glenn Johnson Normalisation
+- Find and Replace column names
+- Glenn Johnson Normalization
 - EM interactive profile Script
 - Cosine Theta
-- Detect vs Non Detec Script
+- Detect vs Non Detect Script
 - Calculate distance from lat long
 
 
