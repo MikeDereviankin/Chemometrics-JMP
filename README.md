@@ -46,14 +46,8 @@ Go to the project directory
 Now double cick on jmp file it will open this kind of window
 [![jmp4.png](https://i.postimg.cc/x1q02BDm/jmp4.png)](https://postimg.cc/tsQ0dSgR)
 
-Now you will see green triangle on top left corner like this [![jpm9.png](https://i.postimg.cc/ZnFDXY5S/jpm9.png)](https://postimg.cc/4Hy59gcL)
-click on it
-
 ## Screenshots
 Examples of other scripts results are:
-
-
-[![jmp6.png](https://i.postimg.cc/0y6bfzNh/jmp6.png)](https://postimg.cc/QF38Nx1q)
 
 [![jmp7.png](https://i.postimg.cc/mg0h6Tzk/jmp7.png)](https://postimg.cc/QFJXFGqZ)
 
