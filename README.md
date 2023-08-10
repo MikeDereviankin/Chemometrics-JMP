@@ -49,13 +49,6 @@ Now double cick on jmp file it will open this kind of window
 Now you will see green triangle on top left corner like this [![jpm9.png](https://i.postimg.cc/ZnFDXY5S/jpm9.png)](https://postimg.cc/4Hy59gcL)
 click on it
 
-After that you will see Script running like let's say you clicked on long and lat Scripts it will show you result like this:
-
-
-[![jmp5.png](https://i.postimg.cc/yYmfNNB4/jmp5.png)](https://postimg.cc/w7B5fg70)
-
-
-
 ## Screenshots
 Examples of other scripts results are:
 
